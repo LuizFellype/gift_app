@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
+import Route from './RouteConfig'
 
 class App extends Component {
   render () {
     return (
-      <div className='App'>
-        <h1>Cleaning baby!</h1>
-      </div>
+      <Route />
     )
   }
 }
