@@ -57,7 +57,7 @@ class Login extends PureComponent {
     const { data } = await request(signIn(dataAccount))
 
     const accountConfirmation =
-      !data.login.token ? false : true
+      !data.login ? false : true
 
     if (!accountConfirmation) {
       this.setState({ handleForm: false })
