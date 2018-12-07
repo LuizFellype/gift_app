@@ -50,6 +50,7 @@ class Login extends PureComponent {
   
       await localStorage.setItem('token', data.signup.token)
       await localStorage.setItem('user', JSON.stringify(data.signup.user))
+      this.allProps.history.push('/presentes')
       return
     }
 
@@ -66,7 +67,6 @@ class Login extends PureComponent {
 
     await localStorage.setItem('token', data.login.token)
     await localStorage.setItem('user', JSON.stringify(data.login.user))
-
     this.allProps.history.push('/presentes')
   }
 
