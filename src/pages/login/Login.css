@@ -1,0 +1,31 @@
+.login-container, .container-login-button, .login-loading {
+  display: flex;
+  justify-content: center;
+}
+.login-container, .login-loading {
+  align-items: center;
+}
+.login-container {
+  padding-top: 150px;
+}
+.login-loading {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.container-login-button button.login-btn {
+  width: 50%;
+}
+.login-card h1.login-card-title {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.login-form-group {
+  margin-bottom: 10px;
+}
+
+.login-card {
+ border-radius: 15px;
+ margin-top: 1.5em;
+}
