@@ -1,0 +1,12 @@
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo .img img {
+  border-radius: 5px;
+  width: 100%;
+}
