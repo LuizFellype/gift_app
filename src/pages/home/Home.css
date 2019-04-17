@@ -1,0 +1,24 @@
+.form {
+  min-width: 30%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  box-shadow: 3px 4px #ddd6;
+  background-color: #eee9;
+}
+
+.new-product-block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px
+}
+.new-product-block > .input-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.product-underform {
+  display: flex;
+  flex-direction: row-reverse
+}
