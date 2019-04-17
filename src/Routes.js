@@ -3,6 +3,7 @@ import { createHashHistory } from 'history'
 import { Route, Router, Redirect, Switch } from 'react-router-dom'
 import { Login } from './pages'
 import { isAuthenticated } from './services'
+import { Admin } from './containers'
 
 const history = createHashHistory()
 
@@ -11,7 +12,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     {...rest}
     render={props =>
       isAuthenticated() ? (
-        <Component {...props} />
+        <Admin {...props}>
+          <Component {...props} />
+        </Admin>
       ) : (
         <Redirect to={{ pathname: '/login' }} />
       )
