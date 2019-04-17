@@ -6,6 +6,7 @@ mutation{
       id
       name
       email
+      recognizeId
     }
   }
 }

@@ -4,14 +4,15 @@ import { loginM, singup, post } from './requests/Mutation'
 import { VARIABLES } from '../utils'
 
 const user = Storage.get(VARIABLES.USER_KEY)
-const url = 'https://giftme-api.herokuapp.com/'
+const getId = () => (user ? user.user.id : '')
+const getToken = () => (user ? user.token : '')
 
 const request = async (query = loginM(), headers = {}) => {
   // console.log({ query })
-  const response = await fetch(url, {
+  const response = await fetch(VARIABLES.URL, {
     method: 'POST',
     headers: {
-      Authorization: (user || { token: '' }).token,
+      Authorization: getToken(),
       'Content-Type': 'application/json',
       ...headers
     },
@@ -29,7 +30,6 @@ export const login = async (email, password) => {
   const { data, errors } = await request(loginM(loginData))
   if (!data) return errors
   Storage.set(VARIABLES.USER_KEY, data.login)
-  return true
 }
 
 export const regiserUser = (name, email, password) =>
@@ -38,4 +38,5 @@ export const regiserUser = (name, email, password) =>
 export const createPost = (productName, placeReference) =>
   request(post({ name: productName, placeReference }))
 
-export const me = () => request(meQ())
+export const me = () => request(meQ(JSON.stringify(getId())))
+export const isAuthenticated = () => !!user

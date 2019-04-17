@@ -2,16 +2,15 @@ import React from 'react'
 import { createHashHistory } from 'history'
 import { Route, Router, Redirect, Switch } from 'react-router-dom'
 import { Login } from './pages'
+import { isAuthenticated } from './services'
 
 const history = createHashHistory()
-
-const isAuthenticated = false
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      isAuthenticated ? (
+      isAuthenticated() ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: '/login' }} />
@@ -24,7 +23,7 @@ const AuthRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      !isAuthenticated ? (
+      !isAuthenticated() ? (
         <Component {...props} />
       ) : (
         <Redirect to={{ pathname: '/' }} />

@@ -1,6 +1,6 @@
-export const meQ = () => `
+export const meQ = id => `
   {
-    user {
+    user(id: ${id}) {
       id
       name
       email
