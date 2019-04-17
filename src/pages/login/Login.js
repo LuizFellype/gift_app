@@ -35,7 +35,7 @@ export const Login = ({ history }) => {
 
     setLoading(false)
 
-    growl.show({
+    growl.current.show({
       severity: 'success',
       summary: MESSAGES.SUCCESS.GENERIC.TITLE,
       detail: MESSAGES.SUCCESS.AUTH.LOGIN
