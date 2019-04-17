@@ -7,6 +7,7 @@ import { Button } from 'primereact/button'
 import { Message } from 'primereact/message'
 import { Logo } from '../../components/logo/Logo'
 import { MESSAGES, validations } from '../../utils'
+import { login } from '../../services'
 import './Login.css'
 
 export const Login = ({ history }) => {
@@ -26,7 +27,7 @@ export const Login = ({ history }) => {
     setLoading(true)
 
     try {
-      // Log in
+      await login(username, password)
     } catch (err) {
       setLoginError(MESSAGES.ERRORS.AUTH.LOGIN.FAIL)
       setLoading(false)
@@ -44,8 +45,6 @@ export const Login = ({ history }) => {
   }
 
   const formValidation = (username, password) => {
-    setLoading(false)
-
     if (!validations.isEmail(username)) {
       setLoginError(MESSAGES.ERRORS.AUTH.LOGIN.INVALID_EMAIL)
       return false
@@ -55,6 +54,8 @@ export const Login = ({ history }) => {
       setLoginError(MESSAGES.ERRORS.AUTH.LOGIN.EMPTY_PASSWORD)
       return false
     }
+
+    return true
   }
 
   return (
