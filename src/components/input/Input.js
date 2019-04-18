@@ -14,7 +14,9 @@ export const useInput = (inputProps, initialValue = '') => {
 export const Input = props => {
   return (
     <div className='input-block'>
-      <label htmlFor={props.id}>{props.label}</label>
+      <label htmlFor={props.id} style={{ marginBottom: '3px' }}>
+        {props.label}
+      </label>
       <InputText {...props} />
     </div>
   )
