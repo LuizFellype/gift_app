@@ -39,4 +39,4 @@ export const createPost = (productName, placeReference) =>
   request(post({ name: productName, placeReference }))
 
 export const me = () => request(meQ(JSON.stringify(getId())))
-export const isAuthenticated = () => !!user
+export const isAuthenticated = () => !!Storage.get(VARIABLES.USER_KEY)
