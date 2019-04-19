@@ -71,6 +71,6 @@ export class Storage {
    * @memberof Storage
    */
   static clear() {
-    localStorage.setItem()
+    localStorage.clear()
   }
 }

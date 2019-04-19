@@ -6,7 +6,9 @@
   align-items: center;
 }
 .login-container {
-  padding-top: 150px;
+  height: 100vh;
+  width: 100%;
+  margin: 0px !important;
 }
 .login-loading {
   margin: 0;

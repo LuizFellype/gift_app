@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { ScrollPanel } from 'primereact/components/scrollpanel/ScrollPanel'
 import classNames from 'classnames'
+import { Storage } from '../../services'
 import Topbar from './Topbar'
 import AppMenu from './AppMenu'
 import './Admin.css'
@@ -72,7 +73,7 @@ export class Admin extends PureComponent {
         icon: 'pi pi-sign-out',
         label: 'Sair',
         command: () => {
-          localStorage.clear()
+          Storage.clear()
           this.props.history.push('/login')
         }
       }

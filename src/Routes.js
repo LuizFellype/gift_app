@@ -1,7 +1,7 @@
 import React from 'react'
 import { createHashHistory } from 'history'
 import { Route, Router, Redirect, Switch } from 'react-router-dom'
-import { Login } from './pages'
+import { Login, Home } from './pages'
 import { isAuthenticated } from './services'
 import { Admin } from './containers'
 
@@ -34,8 +34,6 @@ const AuthRoute = ({ component: Component, ...rest }) => (
     }
   />
 )
-
-const Home = () => <h1>Home</h1>
 
 const Routes = () => {
   return (
