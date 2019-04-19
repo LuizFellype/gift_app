@@ -10,7 +10,7 @@ export const INPUTPROPS = {
     placeholder: 'Digite o nome'
   },
   place: {
-    id: 'productNplaceToFindame',
+    id: 'placeToFind',
     label: 'Loja/Lugar',
     placeholder: 'Onde posso encontrar'
   }
