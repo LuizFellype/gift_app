@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Product list render withou crash Check html sctructure of the component 1`] = `
+<DocumentFragment>
+  <div
+    class="table-block"
+    data-testid="table-wrapper"
+  >
+    <div
+      class="p-datatable p-component p-datatable-responsive p-datatable-auto-layout"
+    >
+      <div
+        class="p-datatable-wrapper"
+      >
+        <table>
+          <thead
+            class="p-datatable-thead"
+          >
+            <tr>
+              <th
+                class="p-sortable-column"
+                tabindex="0"
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Nome do produto
+                </span>
+                <span
+                  class="p-sortable-column-icon pi pi-fw pi-sort"
+                />
+              </th>
+              <th
+                class="p-sortable-column"
+                tabindex="0"
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Loja/Lugar
+                </span>
+                <span
+                  class="p-sortable-column-icon pi pi-fw pi-sort"
+                />
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="p-datatable-tbody"
+          >
+            <tr
+              class="p-datatable-emptymessage"
+            >
+              <td
+                colspan="2"
+              >
+                No records found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

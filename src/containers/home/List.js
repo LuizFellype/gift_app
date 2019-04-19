@@ -5,7 +5,7 @@ import { Column } from 'primereact/column'
 
 // eslint-disable-next-line react/display-name
 export const ProductList = React.memo(({ products = [] }) => (
-  <div className='table-block'>
+  <div className='table-block' data-testid='table-wrapper'>
     <DataTable value={products} autoLayout responsive>
       <Column field='productName' header='Nome do produto' sortable />
       <Column field='url' header='Loja/Lugar' sortable />
