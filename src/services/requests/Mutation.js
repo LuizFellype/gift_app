@@ -67,3 +67,9 @@ export const addPartnerM = recognizeId => `
     }
   }
 `
+
+export const disconnectM = () => `
+  mutation {
+    disconnect
+  }
+`
