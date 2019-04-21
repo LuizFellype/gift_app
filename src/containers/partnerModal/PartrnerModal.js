@@ -3,38 +3,12 @@ import { Growl } from 'primereact/growl'
 import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { Input, useInput } from '../../components'
-import { VARIABLES, MESSAGES, INPUTPROPS } from '../../utils'
+import { VARIABLES, MESSAGES, INPUTPROPS, validations } from '../../utils'
 import { Storage, addPartner } from '../../services'
 import './PartnerModal.css'
 
-const { PARTNER, AUTH, GENERIC } = MESSAGES.ERRORS
+const { GENERIC } = MESSAGES.ERRORS
 const userSaved = Storage.get(VARIABLES.USER_KEY)
-
-const responseValidation = (setMessage, resposne) => {
-  const { data, errors } = resposne
-  if (!data) {
-    switch (errors.message) {
-      case 'User already connected to someone else':
-        setMessage(PARTNER.CONNECTED)
-        return false
-      case 'No such user found':
-        setMessage(PARTNER.NOT_FOUND)
-        return false
-      case 'Not Authenticated':
-        setMessage(AUTH.NOT_AUTHENTICATED)
-        return false
-      default:
-        setMessage(GENERIC.CONTENT)
-        return false
-    }
-  }
-  const user = {
-    ...userSaved,
-    user: { ...userSaved.user, partner: data.addPartner.partner }
-  }
-  Storage.set(VARIABLES.USER_KEY, user)
-  return true
-}
 
 const PartnerForm = ({ showGrowl }) => {
   const recognizeIdField = useInput(INPUTPROPS.recognizeId)
@@ -44,7 +18,7 @@ const PartnerForm = ({ showGrowl }) => {
     const recognizeId = recognizeIdField.value.trim()
     try {
       const response = await addPartner(recognizeId)
-      if (!responseValidation(showGrowl, response)) return
+      if (!validations.partnerResponse(showGrowl, response)) return
 
       const successMessage = MESSAGES.SUCCESS.PARTNER.CONNECTED(
         response.data.addPartner.partner.name
