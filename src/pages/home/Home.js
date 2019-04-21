@@ -3,7 +3,7 @@ import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
 import { useHomeFlow } from '../../reducers/productsReducer'
 import { me } from '../../services/__mocks__/Client'
-import { VARIABLES } from '../../utils'
+import { VARIABLES, backup } from '../../utils'
 import { Storage } from '../../services'
 import './Home.css'
 
@@ -37,6 +37,7 @@ export const Home = React.memo(() => {
 
   useEffect(() => {
     attData()
+    return () => backup(state)
   }, [])
 
   const scrollTableContainer = left =>
