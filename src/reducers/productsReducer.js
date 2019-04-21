@@ -14,8 +14,6 @@ const productsReducer = (state, { type, payload }) => {
         return state
       }
       return { ...state, ...payload }
-    case 'SET_NAME':
-      return { ...state, partnerName: payload }
     case 'ADD':
       return {
         ...state,
