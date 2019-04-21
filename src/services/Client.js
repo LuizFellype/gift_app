@@ -4,7 +4,6 @@ import { loginM, singup, post, addPartnerM } from './requests/Mutation'
 import { VARIABLES } from '../utils/variables'
 
 const user = Storage.get(VARIABLES.USER_KEY)
-const getId = () => (user ? user.user.id : '')
 const getToken = () => (user ? user.token : '')
 
 const request = async (query = loginM(), headers = {}) => {
@@ -40,5 +39,5 @@ export const createPost = (productName, placeReference) =>
 
 export const addPartner = recognizeId =>
   request(addPartnerM(JSON.stringify(recognizeId)))
-export const me = () => request(meQ(JSON.stringify(getId())))
+export const me = () => request(meQ())
 export const isAuthenticated = () => !!Storage.get(VARIABLES.USER_KEY)
