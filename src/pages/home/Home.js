@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
 import { useHomeFlow } from '../../reducers/productsReducer'
@@ -17,8 +17,15 @@ const style = {
 
 // eslint-disable-next-line react/display-name
 export const Home = React.memo(() => {
+  const [disableToSync, setDisableToSync] = useState(false)
   const [state, setState, dispatch] = useHomeFlow()
   const tableContainer = useRef()
+
+  const controlButton = async callBack => {
+    setDisableToSync(true)
+    await callBack()
+    setDisableToSync(false)
+  }
 
   const attData = async () => {
     try {
@@ -62,10 +69,11 @@ export const Home = React.memo(() => {
 
       <div className='options-block'>
         <Button
-          onClick={attData}
+          onClick={async () => controlButton(attData)}
           icon='pi pi-refresh'
           style={style.buttonRefresh}
           className='p-button-success'
+          disabled={disableToSync}
         />
         <Button
           onClick={() => scrollTableContainer(0)}
