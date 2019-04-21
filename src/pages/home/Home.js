@@ -1,10 +1,7 @@
-import React, { useRef, useEffect, useReducer } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
-import {
-  productsInitialState,
-  productsReducer
-} from '../../reducers/productsReducer'
+import { useHomeFlow } from '../../reducers/productsReducer'
 import { me } from '../../services/__mocks__/Client'
 import { VARIABLES } from '../../utils'
 import { Storage } from '../../services'
@@ -21,34 +18,20 @@ const style = {
 
 // eslint-disable-next-line react/display-name
 export const Home = React.memo(() => {
-  const [state, dispatch] = useReducer(productsReducer, productsInitialState)
+  const [state, setState] = useHomeFlow()
   const tableContainer = useRef()
-
-  const updateHomeState = ({ partner = {}, products }) => {
-    const partnerData =
-      partner && partner.name
-        ? { partnerProducts: partner.products, partnerName: partner.name }
-        : {}
-
-    const payload = {
-      userProducts: products,
-      ...partnerData
-    }
-
-    dispatch({ type: 'SET_UPDATED', payload })
-  }
 
   const attData = async () => {
     try {
       const { data } = await me()
       if (!data) {
         const { user } = Storage.get(VARIABLES.USER_KEY)
-        return updateHomeState(user)
+        return setState(user)
       }
-      updateHomeState(data.user)
+      setState(data.user)
     } catch (err) {
       const { user } = Storage.get(VARIABLES.USER_KEY)
-      updateHomeState(user)
+      setState(user)
     }
   }
 
