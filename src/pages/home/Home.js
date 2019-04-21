@@ -2,9 +2,8 @@ import React, { useRef, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
 import { useHomeFlow } from '../../reducers/productsReducer'
-import { me } from '../../services/__mocks__/Client'
 import { VARIABLES, backup } from '../../utils'
-import { Storage } from '../../services'
+import { Storage, createPost, me } from '../../services'
 import './Home.css'
 
 const style = {
@@ -18,7 +17,7 @@ const style = {
 
 // eslint-disable-next-line react/display-name
 export const Home = React.memo(() => {
-  const [state, setState] = useHomeFlow()
+  const [state, setState, dispatch] = useHomeFlow()
   const tableContainer = useRef()
 
   const attData = async () => {
@@ -37,19 +36,31 @@ export const Home = React.memo(() => {
 
   useEffect(() => {
     attData()
-    return () => backup(state)
   }, [])
+
+  const handleSubmit = async ({ product, url }) => {
+    try {
+      const { data } = await createPost(product, url)
+      if (!data) return false
+      dispatch({ type: 'ADD', payload: data.post })
+    } catch (err) {
+      console.log({ err })
+    }
+  }
 
   const scrollTableContainer = left =>
     tableContainer.current.scrollTo({ left, behavior: 'smooth' })
 
   return (
     <>
-      <ProductForm />
+      <ProductForm onSubmit={handleSubmit} />
 
       <div className='options-block'>
         <Button
-          onClick={attData}
+          onClick={() => {
+            attData()
+            backup(state)
+          }}
           icon='pi pi-refresh'
           style={style.buttonRefresh}
           className='p-button-success'
