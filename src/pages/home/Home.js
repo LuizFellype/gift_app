@@ -1,6 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useEffect, useReducer } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
+import {
+  productsInitialState,
+  productsReducer
+} from '../../reducers/productsReducer'
 import { me } from '../../services/__mocks__/Client'
 import './Home.css'
 
@@ -15,19 +19,24 @@ const style = {
 
 // eslint-disable-next-line react/display-name
 export const Home = React.memo(() => {
-  const [userData, setUserData] = useState({})
-  const [partnerData, setPartnerData] = useState({})
+  const [state, dispatch] = useReducer(productsReducer, productsInitialState)
   const tableContainer = useRef()
 
   const attData = async () => {
     try {
       const { data } = await me()
       const { partner = {}, products } = data.user
+      const partnerData =
+        partner && partner.name
+          ? { partnerProducts: partner.products, partnerName: partner.name }
+          : {}
 
-      if (partner && partner.id) {
-        setPartnerData(partner)
+      const payload = {
+        userProducts: products,
+        ...partnerData
       }
-      setUserData({ products })
+
+      dispatch({ type: 'SET_UPDATED', payload })
     } catch (err) {
       console.log({ err })
     }
@@ -39,9 +48,6 @@ export const Home = React.memo(() => {
 
   const scrollTableContainer = left =>
     tableContainer.current.scrollTo({ left, behavior: 'smooth' })
-
-  const partnerButtonLabel =
-    (partnerData && partnerData.name) || 'Presentes dele(a)'
 
   return (
     <>
@@ -61,15 +67,15 @@ export const Home = React.memo(() => {
         />
         <Button
           onClick={() => scrollTableContainer(1000)}
-          label={partnerButtonLabel}
+          label={state.partnerName}
           style={style.buttonToScrol}
         />
       </div>
 
       <div className='tables-container' ref={tableContainer}>
         <div className='tables-block'>
-          <ProductList products={userData.products || []} />
-          <ProductList products={partnerData.products || []} />
+          <ProductList products={state.userProducts} />
+          <ProductList products={state.partnerProducts} />
         </div>
       </div>
     </>
