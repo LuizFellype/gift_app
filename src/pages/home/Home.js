@@ -6,6 +6,8 @@ import {
   productsReducer
 } from '../../reducers/productsReducer'
 import { me } from '../../services/__mocks__/Client'
+import { VARIABLES } from '../../utils'
+import { Storage } from '../../services'
 import './Home.css'
 
 const style = {
@@ -22,23 +24,31 @@ export const Home = React.memo(() => {
   const [state, dispatch] = useReducer(productsReducer, productsInitialState)
   const tableContainer = useRef()
 
+  const updateHomeState = ({ partner = {}, products }) => {
+    const partnerData =
+      partner && partner.name
+        ? { partnerProducts: partner.products, partnerName: partner.name }
+        : {}
+
+    const payload = {
+      userProducts: products,
+      ...partnerData
+    }
+
+    dispatch({ type: 'SET_UPDATED', payload })
+  }
+
   const attData = async () => {
     try {
       const { data } = await me()
-      const { partner = {}, products } = data.user
-      const partnerData =
-        partner && partner.name
-          ? { partnerProducts: partner.products, partnerName: partner.name }
-          : {}
-
-      const payload = {
-        userProducts: products,
-        ...partnerData
+      if (!data) {
+        const { user } = Storage.get(VARIABLES.USER_KEY)
+        return updateHomeState(user)
       }
-
-      dispatch({ type: 'SET_UPDATED', payload })
+      updateHomeState(data.user)
     } catch (err) {
-      console.log({ err })
+      const { user } = Storage.get(VARIABLES.USER_KEY)
+      updateHomeState(user)
     }
   }
 

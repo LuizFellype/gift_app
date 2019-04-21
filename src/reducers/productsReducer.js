@@ -1,13 +1,23 @@
-export const productsReducer = (state, action) => {
-  switch (action.type) {
+export const productsReducer = (state, { type, payload }) => {
+  switch (type) {
     case 'SET_UPDATED':
-      return { ...state, ...action.payload }
+      const userDataVerification =
+        (payload.userProducts || state.userProducts).length ===
+        state.userProducts.length
+      const partnerDataVerification =
+        (payload.partnerProducts || state.partnerProducts).length ===
+        state.partnerProducts.length
+
+      if (userDataVerification && partnerDataVerification) {
+        return state
+      }
+      return { ...state, ...payload }
     case 'SET_NAME':
-      return { ...state, partnerName: action.payload }
+      return { ...state, partnerName: payload }
     case 'ADD':
       return {
         ...state,
-        userProducts: [...state.userProducts, action.payload]
+        userProducts: [...state.userProducts, payload]
       }
     default:
       return state
