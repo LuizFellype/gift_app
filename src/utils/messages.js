@@ -34,7 +34,8 @@ export const MESSAGES = {
       TITLE: 'Operação realizada com sucesso!'
     },
     AUTH: {
-      LOGIN: 'Login efetuado. Redirecionando...'
+      LOGIN: 'Login efetuado. Redirecionando...',
+      REGISTER: 'Conta criada com sucesso. Redirecionando para login'
     },
     SERVICE: {
       RULEDELETED: 'Agenda deletada!',

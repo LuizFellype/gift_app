@@ -7,24 +7,51 @@ import { Button } from 'primereact/button'
 import { Message } from 'primereact/message'
 import { Logo } from '../../components/logo/Logo'
 import { MESSAGES, validations } from '../../utils'
-import { login } from '../../services'
+import { login, regiserUser } from '../../services'
 import './Login.css'
 
-export const Login = ({ history }) => {
+export const Login = ({ history, location }) => {
   const [loading, setLoading] = useState(false)
   const [loginError, setLoginError] = useState('')
+  const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const growl = useRef()
+  const isRegister = location.pathname !== '/login'
 
-  const onLoginSubmit = async event => {
+  const onLoginSubmit = async (event, goToOtherPage = false) => {
+    if (goToOtherPage) {
+      const path = location.pathname === '/login' ? '/registrar' : '/login'
+      return history.replace(path)
+    }
     event.preventDefault()
 
     if (!formValidation(username, password)) return
 
     setLoginError('')
     setLoading(true)
+    if (isRegister) {
+      try {
+        await regiserUser(name, username, password)
+        growl.current.show({
+          severity: 'success',
+          summary: MESSAGES.SUCCESS.GENERIC.TITLE,
+          detail: MESSAGES.SUCCESS.AUTH.REGISTER
+        })
+        setTimeout(() => {
+          setLoading(false)
+          history.push('/login')
+        })
+        return
+      } catch (err) {
+        return growl.current.show({
+          severity: 'error',
+          summary: MESSAGES.ERRORS.GENERIC.TITLE,
+          detail: MESSAGES.ERRORS.GENERIC.CONTENT
+        })
+      }
+    }
 
     try {
       await login(username, password)
@@ -65,8 +92,19 @@ export const Login = ({ history }) => {
         <Logo />
         <div className='card card-w-title login-card'>
           <h1 className='login-card-title'>LOGIN</h1>
-          <form onSubmit={onLoginSubmit}>
+          <div onSubmit={onLoginSubmit}>
             <div className='p-grid'>
+              {!isRegister || (
+                <div className='p-col-12 login-form-group'>
+                  <label htmlFor='name'>Seu Nome</label>
+                  <InputText
+                    id='name'
+                    type='text'
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
+                </div>
+              )}
               <div className='p-col-12 login-form-group'>
                 <label htmlFor='username'>Email</label>
                 <InputText
@@ -94,8 +132,17 @@ export const Login = ({ history }) => {
               )}
               <div className='p-col-12 container-login-button'>
                 <Button
-                  type='submit'
-                  label='Entrar'
+                  onClick={e => onLoginSubmit(e, true)}
+                  label={isRegister ? 'Cancelar' : 'Registrar'}
+                  icon={isRegister ? 'pi pi-times' : ''}
+                  className={`ogin-btn ${
+                    isRegister ? 'p-button-danger' : 'p-button-success'
+                  }`}
+                  disabled={loading}
+                />
+                <Button
+                  onClick={onLoginSubmit}
+                  label={isRegister ? 'Registar' : 'Entrar'}
                   className='login-btn'
                   disabled={loading}
                 />
@@ -106,7 +153,7 @@ export const Login = ({ history }) => {
                 </div>
               )}
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
