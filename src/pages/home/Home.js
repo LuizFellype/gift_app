@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
 import { useHomeFlow } from '../../reducers/productsReducer'
-import { VARIABLES, backup } from '../../utils'
-import { Storage, createPost, me } from '../../services'
+import { VARIABLES, syncData } from '../../utils'
+import { Storage, createPost } from '../../services'
 import './Home.css'
 
 const style = {
@@ -22,7 +22,7 @@ export const Home = React.memo(() => {
 
   const attData = async () => {
     try {
-      const { data } = await me()
+      const { data } = await syncData(handleSubmit)
       if (!data) {
         const { user } = Storage.get(VARIABLES.USER_KEY)
         return setState(user)
@@ -44,7 +44,12 @@ export const Home = React.memo(() => {
       if (!data) return false
       dispatch({ type: 'ADD', payload: data.post })
     } catch (err) {
-      console.log({ err })
+      const payload = {
+        product,
+        url,
+        id: state.userProducts.length
+      }
+      dispatch({ type: 'ADD_LOCAL', payload })
     }
   }
 
@@ -57,10 +62,7 @@ export const Home = React.memo(() => {
 
       <div className='options-block'>
         <Button
-          onClick={() => {
-            attData()
-            backup(state)
-          }}
+          onClick={attData}
           icon='pi pi-refresh'
           style={style.buttonRefresh}
           className='p-button-success'
