@@ -7,6 +7,15 @@ mutation{
       name
       email
       recognizeId
+      partner {
+        recognizeId
+        name
+        products {
+          id
+          productName
+          url
+        }
+      }
     }
   }
 }
