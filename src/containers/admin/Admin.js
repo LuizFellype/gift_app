@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { ScrollPanel } from 'primereact/components/scrollpanel/ScrollPanel'
 import classNames from 'classnames'
 import { Storage } from '../../services'
+import { PartnerModal } from '../partnerModal/PartmerModal'
 import Topbar from './Topbar'
 import AppMenu from './AppMenu'
 import './Admin.css'
@@ -14,7 +15,8 @@ export class Admin extends PureComponent {
       layoutColorMode: 'dark',
       staticMenuInactive: false,
       overlayMenuActive: false,
-      mobileMenuActive: false
+      mobileMenuActive: false,
+      partnerModal: false
     }
     this.createMenu()
   }
@@ -67,8 +69,16 @@ export class Admin extends PureComponent {
     }
   }
 
+  onAddFriendModal = () =>
+    this.setState({ partnerModal: !this.state.partnerModal })
+
   createMenu = () => {
     this.menu = [
+      {
+        icon: 'pi pi-users',
+        label: 'Adicionar parceiro(a)',
+        command: this.onAddFriendModal
+      },
       {
         icon: 'pi pi-sign-out',
         label: 'Sair',
@@ -114,6 +124,12 @@ export class Admin extends PureComponent {
     }
   }
 
+  handleOutsideClicks = e => {
+    if (this.state.mobileMenuActive) {
+      this.setState({ mobileMenuActive: false })
+    }
+  }
+
   render() {
     let wrapperClass = classNames('layout-wrapper', {
       'layout-overlay': this.state.layoutMode === 'overlay',
@@ -153,7 +169,14 @@ export class Admin extends PureComponent {
           </ScrollPanel>
         </div>
 
-        <div className='layout-main'>{this.props.children}</div>
+        <div className='layout-main' onClick={this.handleOutsideClicks}>
+          {this.props.children}
+        </div>
+
+        <PartnerModal
+          visible={this.state.partnerModal}
+          onModal={this.onAddFriendModal}
+        />
       </div>
     )
   }
