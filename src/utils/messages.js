@@ -3,9 +3,12 @@ import { capitalize } from './functions'
 export const MESSAGES = {
   ERRORS: {
     PARTNER: {
-      CONNECTED:
-        'Usuário já conectado. Peça a ele(a) que desconecte de seu parceiro',
-      NOT_FOUND: 'Usuario não encontrado'
+      CONNECTED: (name = 'usuário') =>
+        `${capitalize(
+          name
+        )} já conectado. Deve desconectar de conexões terceiras para poder conecatar com outro usuário.`,
+      NOT_FOUND: 'Usuario não encontrado',
+      IM_ALONE: 'Você não es†á conecatdo com ninguem'
     },
     GENERIC: {
       TITLE: 'Ocorreu um erro!',

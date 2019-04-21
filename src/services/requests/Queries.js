@@ -2,7 +2,8 @@ export const meQ = id => `
   {
     user(id: ${id}) {
       id
-      name
+      name 
+      email
       recognizeId
       products {
         id

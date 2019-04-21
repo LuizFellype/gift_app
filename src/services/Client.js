@@ -1,7 +1,7 @@
 import { Storage } from './Storage'
 import { meQ } from './requests/Queries'
 import { loginM, singup, post, addPartnerM } from './requests/Mutation'
-import { VARIABLES } from '../utils'
+import { VARIABLES } from '../utils/variables'
 
 const user = Storage.get(VARIABLES.USER_KEY)
 const getId = () => (user ? user.user.id : '')
