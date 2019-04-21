@@ -13,7 +13,7 @@ const responseValidation = (setMessage, resposne) => {
   const { data, errors } = resposne
   if (!data) {
     switch (errors.message) {
-      case 'user already connected to someone else':
+      case 'User already connected to someone else':
         setMessage(PARTNER.CONNECTED)
         return false
       case 'No such user found':
