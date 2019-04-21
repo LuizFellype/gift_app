@@ -13,5 +13,10 @@ export const INPUTPROPS = {
     id: 'placeToFind',
     label: 'Loja/Lugar',
     placeholder: 'Onde posso encontrar'
+  },
+  recognizeId: {
+    id: 'recognizeId',
+    label: 'ID fornecido pelo(a) seu(sua) pareceiro(a)',
+    placeholder: 'Digite ou cole o ID'
   }
 }
