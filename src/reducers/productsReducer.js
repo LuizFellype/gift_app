@@ -1,4 +1,6 @@
 import { useReducer } from 'react'
+import { Storage } from '../services'
+import { VARIABLES } from '../utils'
 
 const productsReducer = (state, { type, payload }) => {
   switch (type) {
@@ -14,13 +16,12 @@ const productsReducer = (state, { type, payload }) => {
         return state
       }
       return { ...state, ...payload }
-    case 'SET_NAME':
-      return { ...state, partnerName: payload }
     case 'ADD':
-      return {
-        ...state,
-        userProducts: [...state.userProducts, payload]
-      }
+      return { ...state, userProducts: [...state.userProducts, payload] }
+    case 'ADD_LOCAL':
+      const userProducts = [...state.userProducts, payload]
+      Storage.set(VARIABLES.LOCALPRODUCTS_KEY, userProducts)
+      return { ...state, userProducts }
     default:
       return state
   }

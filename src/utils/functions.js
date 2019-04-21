@@ -1,5 +1,5 @@
 import { VARIABLES } from './variables'
-import { Storage } from '../services'
+import { Storage, me } from '../services'
 
 export const capitalize = word => {
   const letterUp = word[0].toUpperCase()
@@ -7,22 +7,20 @@ export const capitalize = word => {
   return wordSeparated.join('')
 }
 
-export const backup = state => {
+export const syncData = async createPost => {
+  // send data added offline
   const userSaved = Storage.get(VARIABLES.USER_KEY)
-  if (!userSaved) return false
-  const { partner } = userSaved.user
-  const partnerData = partner
-    ? { ...partner, products: state.partnerProducts }
-    : partner
-  const userData = {
-    ...userSaved,
-    user: {
-      ...userSaved.user,
-      products: state.userProducts,
-      partner: partnerData
-    }
+  const addedLocally = Storage.get(VARIABLES.LOCALPRODUCTS_KEY)
+  if (addedLocally && addedLocally.length > 0) {
+    await addedLocally.map(async product => {
+      await createPost(product)
+    })
   }
+  const userUpdatedResp = await me()
+  if (!userUpdatedResp.data) return userUpdatedResp
 
-  Storage.set(VARIABLES.USER_KEY, userData)
-  return true
+  const newUserData = { ...userSaved, user: { ...userUpdatedResp.data.user } }
+  Storage.set(VARIABLES.USER_KEY, newUserData)
+
+  return userUpdatedResp
 }

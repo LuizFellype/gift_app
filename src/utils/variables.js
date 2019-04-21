@@ -1,4 +1,5 @@
 export const VARIABLES = {
+  LOCALPRODUCTS_KEY: '_userProducts',
   USER_KEY: '_user_giftme',
   URL: 'https://giftme-api.herokuapp.com/'
 }

@@ -4,13 +4,13 @@ import { Dialog } from 'primereact/dialog'
 import { Button } from 'primereact/button'
 import { Input, useInput } from '../../components'
 import { VARIABLES, MESSAGES, INPUTPROPS, validations } from '../../utils'
-import { Storage, addPartner } from '../../services'
+import { Storage, addPartner, disconnect } from '../../services'
 import './PartnerModal.css'
 
 const { GENERIC } = MESSAGES.ERRORS
-const userSaved = Storage.get(VARIABLES.USER_KEY)
+const getUserSaved = () => Storage.get(VARIABLES.USER_KEY)
 
-const PartnerForm = ({ showGrowl }) => {
+const PartnerForm = ({ showGrowl, _connect }) => {
   const recognizeIdField = useInput(INPUTPROPS.recognizeId)
 
   const handleSubmit = async e => {
@@ -24,9 +24,10 @@ const PartnerForm = ({ showGrowl }) => {
         response.data.addPartner.partner.name
       )
       showGrowl(successMessage, false)
+      _connect()
+      recognizeIdField.onChange({ currentTarget: { value: '' } })
     } catch (err) {
       showGrowl(GENERIC.CONTENT)
-      console.log({ err })
     }
   }
 
@@ -42,9 +43,19 @@ const PartnerForm = ({ showGrowl }) => {
   )
 }
 
-const UserData = ({ data, disconnect }) => {
+const UserData = ({ showGrowl, data, _disconnect }) => {
   const disconnectPartner = async () => {
-    disconnect(false) // TODO: disconnect partner
+    const { data, errors } = await disconnect()
+
+    if (!data) {
+      if (errors.message === 'You are not connected with someone') {
+        return showGrowl(MESSAGES.ERRORS.PARTNER.IM_ALONE)
+      }
+
+      return showGrowl(MESSAGES.ERRORS.GENERIC.CONTENT)
+    }
+    showGrowl(MESSAGES.SUCCESS.PARTNER.DISCONNECTED, false)
+    _disconnect()
   }
 
   return (
@@ -68,24 +79,33 @@ const UserData = ({ data, disconnect }) => {
 }
 
 const Modalcontent = ({ showGrowl }) => {
-  const { partner } = userSaved.user
+  const { partner } = getUserSaved().user
   const [isTherePartner, setIsTherePartner] = useState(!!partner)
 
   return isTherePartner ? (
-    <UserData data={partner} disconnect={setIsTherePartner} />
+    <UserData
+      showGrowl={showGrowl}
+      data={partner}
+      _disconnect={() => setIsTherePartner(false)}
+    />
   ) : (
-    <PartnerForm showGrowl={showGrowl} />
+    <PartnerForm
+      showGrowl={showGrowl}
+      _connect={() => setIsTherePartner(true)}
+    />
   )
 }
 
-export const PartnerModal = ({ visible, onModal }) => {
+export const PartnerModal = React.memo(({ visible, onModal }) => {
   const growl = useRef(null)
-  const showGrowl = (message, isErrorMsg = true) =>
+  const showGrowl = (message, isErrorMsg = true) => {
     growl.current.show({
       severity: isErrorMsg ? 'error' : 'success',
       summary: isErrorMsg ? GENERIC.TITLE : MESSAGES.SUCCESS.GENERIC.TITLE,
       detail: message
     })
+    // setTimeout(async () => onModal(), 500)
+  }
 
   return (
     <>
@@ -97,8 +117,11 @@ export const PartnerModal = ({ visible, onModal }) => {
         className='dialog-modal'
         modal
       >
+        <div style={{ paddingBottom: '15px' }}>
+          <strong>SEU(SUA) ID: </strong> {getUserSaved().user.recognizeId}
+        </div>
         <Modalcontent showGrowl={showGrowl} />
       </Dialog>
     </>
   )
-}
+})

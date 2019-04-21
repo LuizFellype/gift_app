@@ -1,7 +1,7 @@
 import React from 'react'
 import { createHashHistory } from 'history'
 import { Route, Router, Redirect, Switch } from 'react-router-dom'
-import { Login, Home } from './pages'
+import { Login as LoginRegister, Home } from './pages'
 import { isAuthenticated } from './services'
 import { Admin } from './containers'
 
@@ -40,7 +40,8 @@ const Routes = () => {
     <Router history={history}>
       <Switch>
         <PrivateRoute exact path='/' component={Home} />
-        <AuthRoute path='/login' component={Login} />
+        <AuthRoute path='/login' component={LoginRegister} />
+        <AuthRoute path='/registrar' component={LoginRegister} />
       </Switch>
     </Router>
   )

@@ -76,7 +76,7 @@ export class Admin extends PureComponent {
     this.menu = [
       {
         icon: 'pi pi-users',
-        label: 'Adicionar parceiro(a)',
+        label: 'Usuário/Parceiro',
         command: this.onAddFriendModal
       },
       {

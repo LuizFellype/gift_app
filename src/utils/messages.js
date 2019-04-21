@@ -27,13 +27,15 @@ export const MESSAGES = {
   SUCCESS: {
     PARTNER: {
       CONNECTED: partnerName =>
-        `${capitalize(partnerName)} adicionado como parceiro(a)`
+        `${capitalize(partnerName)} adicionado como parceiro(a)`,
+      DISCONNECTED: 'Usuário desconectado com sucesso'
     },
     GENERIC: {
       TITLE: 'Operação realizada com sucesso!'
     },
     AUTH: {
-      LOGIN: 'Login efetuado. Redirecionando...'
+      LOGIN: 'Login efetuado. Redirecionando...',
+      REGISTER: 'Conta criada com sucesso. Redirecionando para login'
     },
     SERVICE: {
       RULEDELETED: 'Agenda deletada!',

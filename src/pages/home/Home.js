@@ -1,10 +1,9 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Button } from 'primereact/button'
 import { ProductForm, ProductList } from '../../containers'
 import { useHomeFlow } from '../../reducers/productsReducer'
-import { me } from '../../services/__mocks__/Client'
-import { VARIABLES, backup } from '../../utils'
-import { Storage } from '../../services'
+import { VARIABLES, syncData } from '../../utils'
+import { Storage, createPost } from '../../services'
 import './Home.css'
 
 const style = {
@@ -18,12 +17,19 @@ const style = {
 
 // eslint-disable-next-line react/display-name
 export const Home = React.memo(() => {
-  const [state, setState] = useHomeFlow()
+  const [disableToSync, setDisableToSync] = useState(false)
+  const [state, setState, dispatch] = useHomeFlow()
   const tableContainer = useRef()
+
+  const controlButton = async callBack => {
+    setDisableToSync(true)
+    await callBack()
+    setDisableToSync(false)
+  }
 
   const attData = async () => {
     try {
-      const { data } = await me()
+      const { data } = await syncData(handleSubmit)
       if (!data) {
         const { user } = Storage.get(VARIABLES.USER_KEY)
         return setState(user)
@@ -37,22 +43,37 @@ export const Home = React.memo(() => {
 
   useEffect(() => {
     attData()
-    return () => backup(state)
   }, [])
+
+  const handleSubmit = async ({ product, url }) => {
+    try {
+      const { data } = await createPost(product, url)
+      if (!data) return false
+      dispatch({ type: 'ADD', payload: data.post })
+    } catch (err) {
+      const payload = {
+        product,
+        url,
+        id: state.userProducts.length
+      }
+      dispatch({ type: 'ADD_LOCAL', payload })
+    }
+  }
 
   const scrollTableContainer = left =>
     tableContainer.current.scrollTo({ left, behavior: 'smooth' })
 
   return (
     <>
-      <ProductForm />
+      <ProductForm onSubmit={handleSubmit} />
 
       <div className='options-block'>
         <Button
-          onClick={attData}
+          onClick={async () => controlButton(attData)}
           icon='pi pi-refresh'
           style={style.buttonRefresh}
           className='p-button-success'
+          disabled={disableToSync}
         />
         <Button
           onClick={() => scrollTableContainer(0)}

@@ -1,8 +1,7 @@
-export const meQ = id => `
+export const meQ = () => `
   {
-    user(id: ${id}) {
-      id
-      name 
+    user {
+      name
       email
       recognizeId
       products {
