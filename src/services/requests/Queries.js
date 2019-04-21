@@ -2,13 +2,14 @@ export const meQ = id => `
   {
     user(id: ${id}) {
       id
+      name
+      recognizeId
       products {
         id
         productName
         url
       }
       partner {
-        id
         name
         products {
           id

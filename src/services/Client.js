@@ -1,6 +1,6 @@
 import { Storage } from './Storage'
 import { meQ } from './requests/Queries'
-import { loginM, singup, post } from './requests/Mutation'
+import { loginM, singup, post, addPartnerM } from './requests/Mutation'
 import { VARIABLES } from '../utils'
 
 const user = Storage.get(VARIABLES.USER_KEY)
@@ -38,5 +38,7 @@ export const regiserUser = (name, email, password) =>
 export const createPost = (productName, placeReference) =>
   request(post({ name: productName, placeReference }))
 
+export const addPartner = recognizeId =>
+  request(addPartnerM(JSON.stringify(recognizeId)))
 export const me = () => request(meQ(JSON.stringify(getId())))
 export const isAuthenticated = () => !!Storage.get(VARIABLES.USER_KEY)

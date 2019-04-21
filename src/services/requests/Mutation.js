@@ -38,3 +38,18 @@ export const post = ({ name, placeReference }) => `
     }
   }
 `
+
+export const addPartnerM = recognizeId => `
+  mutation {
+    addPartner(recognizeId: ${recognizeId}){
+      partner {
+        name
+        products {
+          id
+          productName
+          url
+        }
+      }
+    }
+  }
+`
