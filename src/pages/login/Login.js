@@ -45,11 +45,13 @@ export const Login = ({ history, location }) => {
         })
         return
       } catch (err) {
-        return growl.current.show({
+        growl.current.show({
           severity: 'error',
           summary: MESSAGES.ERRORS.GENERIC.TITLE,
           detail: MESSAGES.ERRORS.GENERIC.CONTENT
         })
+        setLoading(false)
+        return
       }
     }
 
